@@ -1,0 +1,8 @@
+Connect-ExchangeOnline -UserPrincipalName "admin@contoso.com"
+Get-EXOMailbox -RecipientTypeDetails UserMailbox -ResultSize Unlimited | 
+    Get-EXOMailboxStatistics | 
+    Select-Object DisplayName, 
+        @{Name="UsedGB";Expression={[math]::Round($_.TotalItemSize.Value.ToGB(),2)}},
+        @{Name="QuotaGB";Expression={50}} |
+    Sort-Object UsedGB -Descending |
+    Format-Table -AutoSize
